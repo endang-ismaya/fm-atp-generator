@@ -6,7 +6,7 @@ A single-page web application for creating custom `.atp` (attribute template) fi
 
 ## Features
 
-- **Player Presets** — Choose from 10 built-in legends (Maldini, Messi, Ronaldo, Haaland, Mbappé, De Bruyne, van Dijk, Neuer, Zidane-Scholes Hybrid) with Prime, Wonderkid, and Veteran profiles
+- **Player Presets** — Choose from 25 built-in legends (Pele, Maradona, Messi, Ronaldo, Ronaldo Nazario, Ronaldinho, Zidane, Xavi, Iniesta, Henry, Cruyff, Beckenbauer, Maldini, Lahm, Roberto Carlos, Pirlo, De Bruyne, Haaland, Mbappé, van Dijk, Buffon, Casillas, Neuer, Zidane-Scholes Hybrid) with Prime, Wonderkid, and Veteran profiles
 - **Role Focus** — Generate templates for 30+ tactical roles (Goalkeeper to Striker) with duty and quality level options
 - **Custom Upload** — Load your own `.atp` file as a baseline template
 - **Dual Player Blend** — Combine two player presets into a single averaged attribute set
