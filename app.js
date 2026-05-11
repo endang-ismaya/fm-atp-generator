@@ -2843,7 +2843,7 @@ function updateOutput() {
   elements.validMetric.className = invalid.length ? "error" : "";
   elements.fileStatus.textContent = invalid.length
     ? "Fix values before export"
-    : "Ready to export";
+    : "";
   elements.fileStatus.className = invalid.length ? "status-pill error" : "status-pill";
   elements.exportButton.disabled = invalid.length > 0 || output.length !== EXACT_SIZE;
   elements.exportSummary.innerHTML = [
