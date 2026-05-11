@@ -4042,6 +4042,7 @@ function makeSelectSearchable(select) {
     document.querySelectorAll(".searchable-select-dropdown.is-open").forEach((el) => {
       el.classList.remove("is-open");
     });
+    dropdown.style.width = trigger.offsetWidth + "px";
     dropdown.classList.add("is-open");
     searchInput.value = "";
     renderOptions();
@@ -4050,6 +4051,7 @@ function makeSelectSearchable(select) {
 
   function closeDropdown() {
     dropdown.classList.remove("is-open");
+    dropdown.style.width = "";
   }
 
   trigger.addEventListener("click", (e) => {
@@ -4072,6 +4074,12 @@ function makeSelectSearchable(select) {
 
   document.addEventListener("click", (e) => {
     if (!wrapper.contains(e.target)) closeDropdown();
+  });
+
+  window.addEventListener("resize", () => {
+    if (dropdown.classList.contains("is-open")) {
+      dropdown.style.width = trigger.offsetWidth + "px";
+    }
   });
 
   select.addEventListener("change", () => {
