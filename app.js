@@ -3898,6 +3898,14 @@ function applyRolePreset(roleKey, secondaryRoleKey, thirdRoleKey, dutyKey, level
   updateOutput();
 }
 
+function getStandoutAttributes(values) {
+  const sorted = attributes
+    .map((attr) => ({ name: attr.name, value: values[attr.name] }))
+    .filter((item) => item.value >= 16)
+    .sort((a, b) => b.value - a.value);
+  return new Set(sorted.slice(0, 12).map((item) => item.name));
+}
+
 function applyPlayerProfiles(
   firstPlayerKey,
   firstProfileKey,
@@ -3909,7 +3917,7 @@ function applyPlayerProfiles(
   const secondSelection = getPlayerProfile(secondPlayerKey, secondProfileKey);
   if (secondSelection.player.neutral) {
     state.values = first;
-    state.highlightedAttributes.clear();
+    state.highlightedAttributes = getStandoutAttributes(first);
     attributes.forEach((attribute) => state.dirtyAttributes.add(attribute.name));
     updateInputs();
     updateOutput();
@@ -3923,7 +3931,9 @@ function applyPlayerProfiles(
     ]),
   );
   state.values = combinedValues;
-  state.highlightedAttributes.clear();
+  const firstStandout = getStandoutAttributes(first);
+  const secondStandout = getStandoutAttributes(second);
+  state.highlightedAttributes = new Set([...firstStandout, ...secondStandout]);
   attributes.forEach((attribute) => state.dirtyAttributes.add(attribute.name));
   updateInputs();
   updateOutput();
