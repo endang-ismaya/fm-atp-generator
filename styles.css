@@ -91,6 +91,10 @@ h3 {
   font-weight: 750;
 }
 
+.status-pill:empty {
+  display: none;
+}
+
 .control-band,
 .summary-grid {
   display: grid;
