@@ -126,18 +126,124 @@ h3 {
   grid-column: span 2;
 }
 
-.player-search {
+.searchable-select {
+  position: relative;
+}
+
+.searchable-select > select.is-hidden {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  display: block !important;
+}
+
+.searchable-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
-  min-height: 36px;
+  min-height: 42px;
+  padding: 9px 10px;
   border: 1px solid var(--line);
   background: #fff;
   color: var(--ink);
-  padding: 7px 10px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.searchable-select-trigger:hover {
+  border-color: #9baab5;
+}
+
+.searchable-select-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchable-select-arrow {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.searchable-select-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-height: 320px;
+  overflow: hidden;
+}
+
+.searchable-select-dropdown.is-open {
+  display: block;
+}
+
+.searchable-select-search {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: var(--soft);
+  color: var(--ink);
   font-size: 0.9rem;
 }
 
-.player-search::placeholder {
+.searchable-select-search::placeholder {
   color: #93a4af;
+}
+
+.searchable-select-search:focus {
+  outline: none;
+  background: #fff;
+}
+
+.searchable-select-options {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.searchable-select-option {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid #f0f2f4;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.searchable-select-option:hover,
+.searchable-select-option.is-selected {
+  background: var(--soft);
+}
+
+.searchable-select-option.is-selected {
+  color: var(--accent-dark);
+}
+
+.searchable-select-empty {
+  padding: 16px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.85rem;
 }
 
 .is-hidden {

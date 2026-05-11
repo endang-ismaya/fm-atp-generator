@@ -4037,25 +4037,101 @@ function exportAtp() {
   URL.revokeObjectURL(link.href);
 }
 
-function filterPlayerSelect(searchInput) {
-  const targetId = searchInput.dataset.target;
-  const select = document.querySelector(`#${targetId}`);
-  if (!select) return;
+function makeSelectSearchable(select) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "searchable-select";
+  select.parentNode.insertBefore(wrapper, select);
+  wrapper.appendChild(select);
 
-  const allOptions = Array.from(select.querySelectorAll("option"));
-  const term = searchInput.value.trim().toLowerCase();
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "searchable-select-trigger";
+  trigger.innerHTML = `<span class="searchable-select-value">${select.options[select.selectedIndex]?.textContent || "Select..."}</span><span class="searchable-select-arrow">&#9662;</span>`;
+  wrapper.insertBefore(trigger, select);
 
-  if (!term) {
-    allOptions.forEach((option) => (option.hidden = false));
-    return;
+  const dropdown = document.createElement("div");
+  dropdown.className = "searchable-select-dropdown";
+  dropdown.innerHTML = `
+    <input type="text" class="searchable-select-search" placeholder="Search..." />
+    <div class="searchable-select-options"></div>
+  `;
+  wrapper.appendChild(dropdown);
+
+  const searchInput = dropdown.querySelector(".searchable-select-search");
+  const optionsContainer = dropdown.querySelector(".searchable-select-options");
+
+  function renderOptions(filter = "") {
+    optionsContainer.innerHTML = "";
+    const term = filter.toLowerCase();
+    let hasMatch = false;
+
+    Array.from(select.options).forEach((option) => {
+      if (term && !option.textContent.toLowerCase().includes(term)) return;
+      hasMatch = true;
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "searchable-select-option";
+      item.textContent = option.textContent;
+      item.dataset.value = option.value;
+      if (option.value === select.value) item.classList.add("is-selected");
+      item.addEventListener("click", () => {
+        select.value = option.value;
+        select.dispatchEvent(new Event("change"));
+        trigger.querySelector(".searchable-select-value").textContent = option.textContent;
+        closeDropdown();
+      });
+      optionsContainer.appendChild(item);
+    });
+
+    if (!hasMatch) {
+      const empty = document.createElement("div");
+      empty.className = "searchable-select-empty";
+      empty.textContent = "No matches";
+      optionsContainer.appendChild(empty);
+    }
   }
 
-  let firstVisible = null;
-  allOptions.forEach((option) => {
-    const match = option.textContent.toLowerCase().includes(term);
-    option.hidden = !match;
-    if (match && !firstVisible) firstVisible = option;
+  function openDropdown() {
+    document.querySelectorAll(".searchable-select-dropdown.is-open").forEach((el) => {
+      el.classList.remove("is-open");
+    });
+    dropdown.classList.add("is-open");
+    searchInput.value = "";
+    renderOptions();
+    searchInput.focus();
+  }
+
+  function closeDropdown() {
+    dropdown.classList.remove("is-open");
+  }
+
+  trigger.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (dropdown.classList.contains("is-open")) {
+      closeDropdown();
+    } else {
+      openDropdown();
+    }
   });
+
+  searchInput.addEventListener("input", () => renderOptions(searchInput.value));
+
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeDropdown();
+      trigger.focus();
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!wrapper.contains(e.target)) closeDropdown();
+  });
+
+  select.addEventListener("change", () => {
+    trigger.querySelector(".searchable-select-value").textContent = select.options[select.selectedIndex]?.textContent || "Select...";
+  });
+
+  select.classList.add("is-hidden");
 }
 
 function bindEvents() {
@@ -4081,10 +4157,6 @@ function bindEvents() {
   });
   elements.playerSelectB.addEventListener("change", () => {
     populateProfileSelect(elements.playerSelectB, elements.profileSelectB);
-  });
-
-  document.querySelectorAll(".player-search").forEach((input) => {
-    input.addEventListener("input", () => filterPlayerSelect(input));
   });
 
   elements.presetTypeSelect.addEventListener("change", updatePresetMode);
@@ -4146,6 +4218,7 @@ function bindEvents() {
 
 function init() {
   populateSelects();
+  document.querySelectorAll("select.searchable").forEach((select) => makeSelectSearchable(select));
   resetValuesFromBase();
   renderVisibleAttributeSections();
   hiddenAttributes.forEach((attribute) => renderAttribute(attribute, elements.hiddenAttributes));
