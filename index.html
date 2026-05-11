@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FM24 ATP Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Football Manager 2024</p>
+            <h1>FM24 ATP Generator</h1>
+          </div>
+          <div class="status-pill" id="fileStatus">Ready to export</div>
+        </header>
+
+        <section class="control-band">
+          <label class="field">
+            <span>Preset Type</span>
+            <select id="presetTypeSelect">
+              <option value="custom">Load custom .atp</option>
+              <option value="player">Player preset</option>
+              <option value="role">Role focus</option>
+            </select>
+          </label>
+          <label class="file-drop custom-control" for="templateUpload">
+            <input id="templateUpload" type="file" accept=".atp,application/octet-stream" />
+            <span>Custom .atp file</span>
+            <strong id="uploadName">No file selected</strong>
+          </label>
+          <label class="field player-control">
+            <span>Player 1</span>
+            <select id="playerSelectA"></select>
+          </label>
+          <label class="field player-control">
+            <span>Version 1</span>
+            <select id="profileSelectA"></select>
+          </label>
+          <label class="field player-control">
+            <span>Player 2</span>
+            <select id="playerSelectB"></select>
+          </label>
+          <label class="field player-control">
+            <span>Version 2</span>
+            <select id="profileSelectB"></select>
+          </label>
+          <label class="field role-control role-field is-hidden">
+            <span>Primary Role</span>
+            <select id="roleSelect"></select>
+          </label>
+          <label class="field role-control role-field is-hidden">
+            <span>Secondary Role</span>
+            <select id="secondaryRoleSelect"></select>
+          </label>
+          <label class="field role-control role-field is-hidden">
+            <span>Third Role</span>
+            <select id="thirdRoleSelect"></select>
+          </label>
+          <label class="field role-control is-hidden">
+            <span>Duty</span>
+            <select id="roleDutySelect"></select>
+          </label>
+          <label class="field role-control is-hidden">
+            <span>Level</span>
+            <select id="roleLevelSelect"></select>
+          </label>
+          <button class="secondary-button" id="applyPreset" type="button">Apply Preset</button>
+          <button class="primary-button" id="exportButton" type="button">Export .atp</button>
+        </section>
+
+        <section class="export-summary" id="exportSummary"></section>
+
+        <section class="summary-grid">
+          <div class="metric">
+            <span>Output Size</span>
+            <strong id="sizeMetric">89 bytes</strong>
+          </div>
+          <div class="metric">
+            <span>Changed Attributes</span>
+            <strong id="changedMetric">0</strong>
+          </div>
+          <div class="metric">
+            <span>Validation</span>
+            <strong id="validMetric">Valid</strong>
+          </div>
+        </section>
+
+        <nav class="tabs" aria-label="Attribute sections">
+          <button class="tab is-active" data-tab="visible" type="button">Visible</button>
+          <button class="tab" data-tab="hidden" type="button">Hidden</button>
+          <button class="tab" data-tab="suggestions" type="button">Editor Suggestions</button>
+          <button class="tab" data-tab="preview" type="button">Byte Preview</button>
+        </nav>
+
+        <section class="panel is-active" id="visiblePanel">
+          <div class="panel-head">
+            <h2>Visible Attributes</h2>
+            <div class="button-group">
+              <button class="icon-button" data-adjust-group="visible" data-delta="-1" type="button" title="Decrease visible attributes">-</button>
+              <button class="ghost-button" data-set="visible" type="button">Set Visible to 10</button>
+              <button class="ghost-button is-hidden" id="visibleRelevantOnly" type="button">Show All</button>
+              <button class="icon-button" data-adjust-group="visible" data-delta="1" type="button" title="Increase visible attributes">+</button>
+            </div>
+          </div>
+          <div class="attribute-grid" id="visibleAttributes"></div>
+        </section>
+
+        <section class="panel" id="hiddenPanel">
+          <div class="panel-head">
+            <h2>Hidden Attributes</h2>
+            <div class="button-group">
+              <button class="icon-button" data-adjust-group="hidden" data-delta="-1" type="button" title="Decrease hidden attributes">-</button>
+              <button class="ghost-button" data-set="hidden" type="button">Set Hidden to 10</button>
+              <button class="ghost-button is-hidden" id="hiddenRelevantOnly" type="button">Show All</button>
+              <button class="icon-button" data-adjust-group="hidden" data-delta="1" type="button" title="Increase hidden attributes">+</button>
+            </div>
+          </div>
+          <div class="attribute-grid" id="hiddenAttributes"></div>
+        </section>
+
+        <section class="panel" id="suggestionsPanel">
+          <div class="panel-head">
+            <h2>Editor Suggestions</h2>
+            <button class="ghost-button" id="downloadChecklist" type="button">Download Checklist</button>
+          </div>
+          <p class="note">These suggestions are not written to the .atp file. Set them manually in the FM editor.</p>
+          <div class="suggestion-grid" id="suggestionGrid"></div>
+        </section>
+
+        <section class="panel" id="previewPanel">
+          <div class="panel-head">
+            <h2>Changed Byte Preview</h2>
+            <button class="ghost-button" id="resetButton" type="button">Reset to Base</button>
+          </div>
+          <div class="preview-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Offset</th>
+                  <th>Mode</th>
+                  <th>Base</th>
+                  <th>Output</th>
+                  <th>Hex</th>
+                </tr>
+              </thead>
+              <tbody id="previewRows"></tbody>
+            </table>
+          </div>
+          <pre class="hex-dump" id="hexDump"></pre>
+        </section>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
