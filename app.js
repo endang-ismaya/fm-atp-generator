@@ -167,10 +167,6 @@ const presets = {
     values: {},
     neutral: true,
   },
-  blank10: {
-    label: "Blank baseline 10",
-    values: baselinePresetValues,
-  },
   maldini: {
     label: "Paolo Maldini Prime",
     values: {
@@ -223,60 +219,6 @@ const presets = {
       "Important Matches": 19,
       "Injury Proneness": 4,
       Versatility: 17,
-    },
-  },
-  zidaneScholes: {
-    label: "Zidane-Scholes Hybrid",
-    values: {
-      Crossing: 16,
-      Dribbling: 18,
-      Finishing: 15,
-      Heading: 14,
-      "Long Shots": 18,
-      Marking: 14,
-      "Off the Ball": 20,
-      Passing: 17,
-      "Penalty Taking": 10,
-      Tackling: 19,
-      Vision: 6,
-      Anticipation: 11,
-      Decisions: 20,
-      Positioning: 15,
-      "First Touch": 10,
-      Technique: 20,
-      Flair: 20,
-      Corners: 18,
-      Teamwork: 20,
-      "Work Rate": 17,
-      "Long Throws": 20,
-      Acceleration: 13,
-      "Free Kick Taking": 16,
-      Strength: 20,
-      Stamina: 16,
-      Pace: 17,
-      "Jumping Reach": 17,
-      Leadership: 13,
-      Balance: 19,
-      Bravery: 20,
-      Aggression: 16,
-      Agility: 17,
-      "Natural Fitness": 12,
-      Determination: 16,
-      Composure: 18,
-      Concentration: 19,
-      Adaptability: 15,
-      Ambition: 17,
-      Loyalty: 14,
-      Pressure: 19,
-      Professionalism: 18,
-      Sportsmanship: 14,
-      Temperament: 17,
-      Controversy: 8,
-      Dirtiness: 7,
-      Consistency: 18,
-      "Important Matches": 19,
-      "Injury Proneness": 8,
-      Versatility: 16,
     },
   },
   messiPrime: {
@@ -1395,81 +1337,25 @@ const presets = {
 };
 
 const playerPresetSeeds = {
-  blank10: {
-    label: "Blank baseline 10",
-    values: baselinePresetValues,
-  },
-  maldini: {
-    label: "Paolo Maldini",
-    values: presets.maldini.values,
-  },
-  zidaneScholes: {
-    label: "Zidane-Scholes Hybrid",
-    values: presets.zidaneScholes.values,
-  },
-  messi: {
-    label: "Lionel Messi",
-    values: presets.messiPrime.values,
-  },
-  ronaldo: {
-    label: "Cristiano Ronaldo",
-    values: presets.ronaldoPrime.values,
-  },
-  haaland: {
-    label: "Erling Haaland",
-    values: presets.haaland.values,
-  },
-  mbappe: {
-    label: "Kylian Mbappe",
-    values: presets.mbappe.values,
-  },
-  deBruyne: {
-    label: "Kevin De Bruyne",
-    values: presets.deBruyne.values,
-  },
-  vanDijk: {
-    label: "Virgil van Dijk",
-    values: presets.vanDijk.values,
-  },
-  neuer: {
-    label: "Manuel Neuer",
-    values: presets.neuer.values,
-  },
-  pele: {
-    label: "Pele",
-    values: presets.pele.values,
-  },
-  maradona: {
-    label: "Diego Maradona",
-    values: presets.maradona.values,
-  },
-  ronaldoNazario: {
-    label: "Ronaldo Nazario",
-    values: presets.ronaldoNazario.values,
-  },
-  ronaldinho: {
-    label: "Ronaldinho",
-    values: presets.ronaldinho.values,
-  },
-  zidane: {
-    label: "Zinedine Zidane",
-    values: presets.zidane.values,
-  },
-  xavi: {
-    label: "Xavi",
-    values: presets.xavi.values,
+  pirlo: {
+    label: "Andrea Pirlo",
+    values: presets.pirlo.values,
   },
   iniesta: {
     label: "Andres Iniesta",
     values: presets.iniesta.values,
   },
-  henry: {
-    label: "Thierry Henry",
-    values: presets.henry.values,
+  ronaldo: {
+    label: "Cristiano Ronaldo",
+    values: presets.ronaldoPrime.values,
   },
-  cruyff: {
-    label: "Johan Cruyff",
-    values: presets.cruyff.values,
+  maradona: {
+    label: "Diego Maradona",
+    values: presets.maradona.values,
+  },
+  haaland: {
+    label: "Erling Haaland",
+    values: presets.haaland.values,
   },
   beckenbauer: {
     label: "Franz Beckenbauer",
@@ -1483,6 +1369,34 @@ const playerPresetSeeds = {
     label: "Iker Casillas",
     values: presets.casillas.values,
   },
+  cruyff: {
+    label: "Johan Cruyff",
+    values: presets.cruyff.values,
+  },
+  deBruyne: {
+    label: "Kevin De Bruyne",
+    values: presets.deBruyne.values,
+  },
+  mbappe: {
+    label: "Kylian Mbappe",
+    values: presets.mbappe.values,
+  },
+  messi: {
+    label: "Lionel Messi",
+    values: presets.messiPrime.values,
+  },
+  neuer: {
+    label: "Manuel Neuer",
+    values: presets.neuer.values,
+  },
+  maldini: {
+    label: "Paolo Maldini",
+    values: presets.maldini.values,
+  },
+  pele: {
+    label: "Pele",
+    values: presets.pele.values,
+  },
   lahm: {
     label: "Philipp Lahm",
     values: presets.lahm.values,
@@ -1491,9 +1405,29 @@ const playerPresetSeeds = {
     label: "Roberto Carlos",
     values: presets.robertoCarlos.values,
   },
-  pirlo: {
-    label: "Andrea Pirlo",
-    values: presets.pirlo.values,
+  ronaldoNazario: {
+    label: "Ronaldo Nazario",
+    values: presets.ronaldoNazario.values,
+  },
+  ronaldinho: {
+    label: "Ronaldinho",
+    values: presets.ronaldinho.values,
+  },
+  henry: {
+    label: "Thierry Henry",
+    values: presets.henry.values,
+  },
+  vanDijk: {
+    label: "Virgil van Dijk",
+    values: presets.vanDijk.values,
+  },
+  xavi: {
+    label: "Xavi",
+    values: presets.xavi.values,
+  },
+  zidane: {
+    label: "Zinedine Zidane",
+    values: presets.zidane.values,
   },
 };
 
@@ -1607,37 +1541,28 @@ function createProfileValues(seedValues, adjustment) {
 }
 
 const playerPresets = Object.fromEntries(
-  Object.entries(playerPresetSeeds).map(([key, seed]) => {
-    const primeValues = { ...baselinePresetValues, ...seed.values };
-    if (key === "blank10") {
+  Object.entries(playerPresetSeeds)
+    .sort(([, a], [, b]) => a.label.localeCompare(b.label))
+    .map(([key, seed]) => {
+      const primeValues = { ...baselinePresetValues, ...seed.values };
       return [
         key,
         {
           label: seed.label,
           profiles: {
-            baseline: { label: "Baseline", values: primeValues },
+            prime: { label: "Prime", values: primeValues },
+            wonderkid: {
+              label: profileAdjustments.wonderkid.label,
+              values: createProfileValues(seed.values, profileAdjustments.wonderkid),
+            },
+            veteran: {
+              label: profileAdjustments.veteran.label,
+              values: createProfileValues(seed.values, profileAdjustments.veteran),
+            },
           },
         },
       ];
-    }
-    return [
-      key,
-      {
-        label: seed.label,
-        profiles: {
-          prime: { label: "Prime", values: primeValues },
-          wonderkid: {
-            label: profileAdjustments.wonderkid.label,
-            values: createProfileValues(seed.values, profileAdjustments.wonderkid),
-          },
-          veteran: {
-            label: profileAdjustments.veteran.label,
-            values: createProfileValues(seed.values, profileAdjustments.veteran),
-          },
-        },
-      },
-    ];
-  }),
+    }),
 );
 
 const neutralPlayerPreset = {
