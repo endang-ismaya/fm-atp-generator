@@ -126,6 +126,20 @@ h3 {
   grid-column: span 2;
 }
 
+.player-search {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  padding: 7px 10px;
+  font-size: 0.9rem;
+}
+
+.player-search::placeholder {
+  color: #93a4af;
+}
+
 .is-hidden {
   display: none !important;
 }
