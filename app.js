@@ -2131,158 +2131,44 @@ const presets = {
 };
 
 const playerPresetSeeds = {
-  pirlo: {
-    label: "Andrea Pirlo",
-    values: presets.pirlo.values,
-  },
-  iniesta: {
-    label: "Andres Iniesta",
-    values: presets.iniesta.values,
-  },
-  ronaldo: {
-    label: "Cristiano Ronaldo",
-    values: presets.ronaldoPrime.values,
-  },
-  maradona: {
-    label: "Diego Maradona",
-    values: presets.maradona.values,
-  },
-  haaland: {
-    label: "Erling Haaland",
-    values: presets.haaland.values,
-  },
-  beckenbauer: {
-    label: "Franz Beckenbauer",
-    values: presets.beckenbauer.values,
-  },
-  buffon: {
-    label: "Gianluigi Buffon",
-    values: presets.buffon.values,
-  },
-  casillas: {
-    label: "Iker Casillas",
-    values: presets.casillas.values,
-  },
-  cruyff: {
-    label: "Johan Cruyff",
-    values: presets.cruyff.values,
-  },
-  deBruyne: {
-    label: "Kevin De Bruyne",
-    values: presets.deBruyne.values,
-  },
-  mbappe: {
-    label: "Kylian Mbappe",
-    values: presets.mbappe.values,
-  },
-  messi: {
-    label: "Lionel Messi",
-    values: presets.messiPrime.values,
-  },
-  neuer: {
-    label: "Manuel Neuer",
-    values: presets.neuer.values,
-  },
-  maldini: {
-    label: "Paolo Maldini",
-    values: presets.maldini.values,
-  },
-  pele: {
-    label: "Pele",
-    values: presets.pele.values,
-  },
-  lahm: {
-    label: "Philipp Lahm",
-    values: presets.lahm.values,
-  },
-  robertoCarlos: {
-    label: "Roberto Carlos",
-    values: presets.robertoCarlos.values,
-  },
-  ronaldoNazario: {
-    label: "Ronaldo Nazario",
-    values: presets.ronaldoNazario.values,
-  },
-  ronaldinho: {
-    label: "Ronaldinho",
-    values: presets.ronaldinho.values,
-  },
-  henry: {
-    label: "Thierry Henry",
-    values: presets.henry.values,
-  },
-  vanDijk: {
-    label: "Virgil van Dijk",
-    values: presets.vanDijk.values,
-  },
-  xavi: {
-    label: "Xavi",
-    values: presets.xavi.values,
-  },
-  zidane: {
-    label: "Zinedine Zidane",
-    values: presets.zidane.values,
-  },
-  cannavaro: {
-    label: "Fabio Cannavaro",
-    values: presets.cannavaro.values,
-  },
-  totti: {
-    label: "Francesco Totti",
-    values: presets.totti.values,
-  },
-  delPiero: {
-    label: "Alessandro Del Piero",
-    values: presets.delPiero.values,
-  },
-  beckham: {
-    label: "David Beckham",
-    values: presets.beckham.values,
-  },
-  thuram: {
-    label: "Lilian Thuram",
-    values: presets.thuram.values,
-  },
-  vieira: {
-    label: "Patrick Vieira",
-    values: presets.vieira.values,
-  },
-  keane: {
-    label: "Roy Keane",
-    values: presets.keane.values,
-  },
-  giggs: {
-    label: "Ryan Giggs",
-    values: presets.giggs.values,
-  },
-  makelele: {
-    label: "Claude Makelele",
-    values: presets.makelele.values,
-  },
-  nesta: {
-    label: "Alessandro Nesta",
-    values: presets.nesta.values,
-  },
-  nedved: {
-    label: "Pavel Nedved",
-    values: presets.nedved.values,
-  },
-  batistuta: {
-    label: "Gabriel Batistuta",
-    values: presets.batistuta.values,
-  },
-  ibrahimovic: {
-    label: "Zlatan Ibrahimovic",
-    values: presets.ibrahimovic.values,
-  },
-  guardiola: {
-    label: "Pep Guardiola",
-    values: presets.guardiola.values,
-  },
-  cantona: {
-    label: "Eric Cantona",
-    values: presets.cantona.values,
-  },
+  pirlo: { label: "Andrea Pirlo", nickname: "L'Architetto", values: presets.pirlo.values },
+  iniesta: { label: "Andres Iniesta", nickname: "El Ilusionista", values: presets.iniesta.values },
+  ronaldo: { label: "Cristiano Ronaldo", nickname: "CR7", values: presets.ronaldoPrime.values },
+  maradona: { label: "Diego Maradona", nickname: "El Pibe de Oro", values: presets.maradona.values },
+  haaland: { label: "Erling Haaland", nickname: "The Machine", values: presets.haaland.values },
+  beckenbauer: { label: "Franz Beckenbauer", nickname: "Der Kaiser", values: presets.beckenbauer.values },
+  buffon: { label: "Gianluigi Buffon", nickname: "Superman", values: presets.buffon.values },
+  casillas: { label: "Iker Casillas", nickname: "San Iker", values: presets.casillas.values },
+  cruyff: { label: "Johan Cruyff", nickname: "El Flaco", values: presets.cruyff.values },
+  deBruyne: { label: "Kevin De Bruyne", nickname: "The Ginger Pele", values: presets.deBruyne.values },
+  mbappe: { label: "Kylian Mbappe", nickname: "Donatello", values: presets.mbappe.values },
+  messi: { label: "Lionel Messi", nickname: "La Pulga", values: presets.messiPrime.values },
+  neuer: { label: "Manuel Neuer", nickname: "The Wall", values: presets.neuer.values },
+  maldini: { label: "Paolo Maldini", nickname: "Il Capitano", values: presets.maldini.values },
+  pele: { label: "Pele", nickname: "O Rei", values: presets.pele.values },
+  lahm: { label: "Philipp Lahm", nickname: "Magic Dwarf", values: presets.lahm.values },
+  robertoCarlos: { label: "Roberto Carlos", nickname: "El Hombre Bala", values: presets.robertoCarlos.values },
+  ronaldoNazario: { label: "Ronaldo Nazario", nickname: "O Fenomeno", values: presets.ronaldoNazario.values },
+  ronaldinho: { label: "Ronaldinho", nickname: "R10", values: presets.ronaldinho.values },
+  henry: { label: "Thierry Henry", nickname: "King Henry", values: presets.henry.values },
+  vanDijk: { label: "Virgil van Dijk", nickname: "The Viking", values: presets.vanDijk.values },
+  xavi: { label: "Xavi", nickname: "The Puppet Master", values: presets.xavi.values },
+  zidane: { label: "Zinedine Zidane", nickname: "Zizou", values: presets.zidane.values },
+  cannavaro: { label: "Fabio Cannavaro", nickname: "The Wall of Berlin", values: presets.cannavaro.values },
+  totti: { label: "Francesco Totti", nickname: "Il Gladiatore", values: presets.totti.values },
+  delPiero: { label: "Alessandro Del Piero", nickname: "Pinturicchio", values: presets.delPiero.values },
+  beckham: { label: "David Beckham", nickname: "Golden Balls", values: presets.beckham.values },
+  thuram: { label: "Lilian Thuram", nickname: "The Fortress", values: presets.thuram.values },
+  vieira: { label: "Patrick Vieira", nickname: "The Invincible", values: presets.vieira.values },
+  keane: { label: "Roy Keane", nickname: "Keano", values: presets.keane.values },
+  giggs: { label: "Ryan Giggs", nickname: "Welsh Wizard", values: presets.giggs.values },
+  makelele: { label: "Claude Makelele", nickname: "The Octopus", values: presets.makelele.values },
+  nesta: { label: "Alessandro Nesta", nickname: "The Gentleman", values: presets.nesta.values },
+  nedved: { label: "Pavel Nedved", nickname: "The Czech Fury", values: presets.nedved.values },
+  batistuta: { label: "Gabriel Batistuta", nickname: "Batigol", values: presets.batistuta.values },
+  ibrahimovic: { label: "Zlatan Ibrahimovic", nickname: "Ibra", values: presets.ibrahimovic.values },
+  guardiola: { label: "Pep Guardiola", nickname: "Don Josep", values: presets.guardiola.values },
+  cantona: { label: "Eric Cantona", nickname: "King Eric", values: presets.cantona.values },
 };
 
 const profileAdjustments = {
@@ -2403,6 +2289,7 @@ const playerPresets = Object.fromEntries(
         key,
         {
           label: seed.label,
+          nickname: seed.nickname,
           profiles: {
             prime: { label: "Prime", values: primeValues },
             wonderkid: {
@@ -3170,6 +3057,7 @@ const elements = {
   sizeMetric: document.querySelector("#sizeMetric"),
   changedMetric: document.querySelector("#changedMetric"),
   validMetric: document.querySelector("#validMetric"),
+  nicknameDisplay: document.querySelector("#nicknameDisplay"),
 };
 
 function encodeValue(attribute, value) {
@@ -3350,6 +3238,23 @@ function getSelectedRoleLabels() {
     .map((roleKey) => rolePresets[roleKey].label);
 }
 
+function combineNicknames(nickA, nickB) {
+  if (!nickA) return nickB || "The Hybrid";
+  if (!nickB) return nickA;
+
+  const clean = (s) => s.replace(/^(The|El|La|Le|Il|L'|Lo|Los|Las|Un|Une|Der|Die|Das|O|A)\s+/i, "").trim();
+  const a = clean(nickA);
+  const b = clean(nickB);
+
+  const wa = a.split(/\s+/);
+  const wb = b.split(/\s+/);
+
+  const first = wa[0];
+  const last = wb[wb.length - 1];
+
+  return `${first} ${last}`;
+}
+
 function getCurrentSelectionLabel() {
   if (getPresetMode() === "role") {
     return getRoleSelectionLabel();
@@ -3359,9 +3264,11 @@ function getCurrentSelectionLabel() {
   const first = getPlayerProfile(elements.playerSelectA.value, elements.profileSelectA.value);
   const second = getPlayerProfile(elements.playerSelectB.value, elements.profileSelectB.value);
   const firstLabel = `${first.player.label} ${first.profile.label}`;
-  return second.player.neutral
-    ? firstLabel
-    : `${firstLabel} + ${second.player.label} ${second.profile.label}`;
+  if (second.player.neutral) {
+    return first.player.nickname ? `${firstLabel} "${first.player.nickname}"` : firstLabel;
+  }
+  const combinedNick = combineNicknames(first.player.nickname, second.player.nickname);
+  return `${firstLabel} + ${second.player.label} ${second.profile.label} — "${combinedNick}"`;
 }
 
 function getModeSummaryItems() {
@@ -3378,11 +3285,16 @@ function getModeSummaryItems() {
   }
   const first = getPlayerProfile(elements.playerSelectA.value, elements.profileSelectA.value);
   const second = getPlayerProfile(elements.playerSelectB.value, elements.profileSelectB.value);
-  return [
+  const items = [
     "Mode: Player Preset",
-    `Player 1: ${first.player.label} / ${first.profile.label}`,
-    `Player 2: ${second.player.label} / ${second.profile.label}`,
+    `Player 1: ${first.player.label} / ${first.profile.label}${first.player.nickname ? ` "${first.player.nickname}"` : ""}`,
   ];
+  if (!second.player.neutral) {
+    const combinedNick = combineNicknames(first.player.nickname, second.player.nickname);
+    items.push(`Player 2: ${second.player.label} / ${second.profile.label}${second.player.nickname ? ` "${second.player.nickname}"` : ""}`);
+    items.push(`Hybrid Name: "${combinedNick}"`);
+  }
+  return items;
 }
 
 function getPositionProficiency(score) {
@@ -3700,6 +3612,22 @@ function updateOutput() {
     : "";
   elements.fileStatus.className = invalid.length ? "status-pill error" : "status-pill";
   elements.exportButton.disabled = invalid.length > 0 || output.length !== EXACT_SIZE;
+
+  if (getPresetMode() === "player") {
+    const first = getPlayerProfile(elements.playerSelectA.value, elements.profileSelectA.value);
+    const second = getPlayerProfile(elements.playerSelectB.value, elements.profileSelectB.value);
+    if (second.player.neutral && first.player.nickname) {
+      elements.nicknameDisplay.textContent = `"${first.player.nickname}"`;
+    } else if (!second.player.neutral) {
+      const combinedNick = combineNicknames(first.player.nickname, second.player.nickname);
+      elements.nicknameDisplay.textContent = `"${combinedNick}"`;
+    } else {
+      elements.nicknameDisplay.textContent = "";
+    }
+  } else {
+    elements.nicknameDisplay.textContent = "";
+  }
+
   elements.exportSummary.innerHTML = [
     ...getModeSummaryItems(),
     `Output: ${output.length} bytes`,
@@ -4028,9 +3956,14 @@ function exportAtp() {
     elements.profileSelectB.value,
   );
   const firstLabel = `${firstSelection.player.label}_${firstSelection.profile.label}`;
-  const secondLabel = `${secondSelection.player.label}_${secondSelection.profile.label}`;
-  const playerLabel = secondSelection.player.neutral ? firstLabel : `${firstLabel}_x_${secondLabel}`;
-  link.download = playerLabel.replaceAll(" ", "_") + ".atp";
+  if (secondSelection.player.neutral) {
+    const nick = firstSelection.player.nickname ? `_${firstSelection.player.nickname.replaceAll(" ", "_")}` : "";
+    link.download = `${firstLabel}${nick}.atp`.replaceAll(" ", "_");
+  } else {
+    const combinedNick = combineNicknames(firstSelection.player.nickname, secondSelection.player.nickname);
+    const secondLabel = `${secondSelection.player.label}_${secondSelection.profile.label}`;
+    link.download = `${firstLabel}_x_${secondLabel}_${combinedNick.replaceAll(" ", "_")}.atp`.replaceAll(" ", "_");
+  }
   document.body.append(link);
   link.click();
   link.remove();
@@ -4046,7 +3979,10 @@ function makeSelectSearchable(select) {
   const trigger = document.createElement("button");
   trigger.type = "button";
   trigger.className = "searchable-select-trigger";
-  trigger.innerHTML = `<span class="searchable-select-value">${select.options[select.selectedIndex]?.textContent || "Select..."}</span><span class="searchable-select-arrow">&#9662;</span>`;
+  const initialOption = select.options[select.selectedIndex];
+  const initialNick = initialOption ? getOptionNickname(initialOption) : null;
+  const initialValue = initialOption?.textContent || "Select...";
+  trigger.innerHTML = `<span class="searchable-select-value">${initialValue}${initialNick ? ` <span class="trigger-nickname">${initialNick}</span>` : ""}</span><span class="searchable-select-arrow">&#9662;</span>`;
   wrapper.insertBefore(trigger, select);
 
   const dropdown = document.createElement("div");
@@ -4060,6 +3996,11 @@ function makeSelectSearchable(select) {
   const searchInput = dropdown.querySelector(".searchable-select-search");
   const optionsContainer = dropdown.querySelector(".searchable-select-options");
 
+  function getOptionNickname(option) {
+    if (select.id !== "playerSelectA" && select.id !== "playerSelectB") return null;
+    return playerPresets[option.value]?.nickname || null;
+  }
+
   function renderOptions(filter = "") {
     optionsContainer.innerHTML = "";
     const term = filter.toLowerCase();
@@ -4071,13 +4012,19 @@ function makeSelectSearchable(select) {
       const item = document.createElement("button");
       item.type = "button";
       item.className = "searchable-select-option";
-      item.textContent = option.textContent;
+      const nickname = getOptionNickname(option);
+      item.innerHTML = nickname
+        ? `<span>${option.textContent}</span><span class="option-nickname">${nickname}</span>`
+        : option.textContent;
       item.dataset.value = option.value;
       if (option.value === select.value) item.classList.add("is-selected");
       item.addEventListener("click", () => {
         select.value = option.value;
         select.dispatchEvent(new Event("change"));
-        trigger.querySelector(".searchable-select-value").textContent = option.textContent;
+        const selectedNick = getOptionNickname(option);
+        trigger.querySelector(".searchable-select-value").innerHTML = selectedNick
+          ? `${option.textContent} <span class="trigger-nickname">${selectedNick}</span>`
+          : option.textContent;
         closeDropdown();
       });
       optionsContainer.appendChild(item);
