@@ -3057,7 +3057,7 @@ const elements = {
   sizeMetric: document.querySelector("#sizeMetric"),
   changedMetric: document.querySelector("#changedMetric"),
   validMetric: document.querySelector("#validMetric"),
-  nicknameDisplay: document.querySelector("#nicknameDisplay"),
+  nicknameBanner: document.querySelector("#nicknameBanner"),
 };
 
 function encodeValue(attribute, value) {
@@ -3617,15 +3617,15 @@ function updateOutput() {
     const first = getPlayerProfile(elements.playerSelectA.value, elements.profileSelectA.value);
     const second = getPlayerProfile(elements.playerSelectB.value, elements.profileSelectB.value);
     if (second.player.neutral && first.player.nickname) {
-      elements.nicknameDisplay.textContent = `"${first.player.nickname}"`;
+      elements.nicknameBanner.innerHTML = `<span class="nickname-banner-text">"${first.player.nickname}"</span>`;
     } else if (!second.player.neutral) {
       const combinedNick = combineNicknames(first.player.nickname, second.player.nickname);
-      elements.nicknameDisplay.textContent = `"${combinedNick}"`;
+      elements.nicknameBanner.innerHTML = `<span class="nickname-banner-text">"${combinedNick}"</span>`;
     } else {
-      elements.nicknameDisplay.textContent = "";
+      elements.nicknameBanner.innerHTML = "";
     }
   } else {
-    elements.nicknameDisplay.textContent = "";
+    elements.nicknameBanner.innerHTML = "";
   }
 
   elements.exportSummary.innerHTML = [

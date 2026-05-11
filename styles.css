@@ -71,16 +71,23 @@ h1 {
   font-size: clamp(2rem, 4vw, 3.5rem);
 }
 
-.nickname {
-  margin: 6px 0 0;
-  color: var(--accent);
-  font-size: 1rem;
-  font-weight: 700;
-  font-style: italic;
+.nickname-banner {
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--soft) 0%, #fff 100%);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
 }
 
-.nickname:empty {
+.nickname-banner:empty {
   display: none;
+}
+
+.nickname-banner-text {
+  color: var(--accent-dark);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.02em;
 }
 
 h2 {
@@ -190,14 +197,14 @@ h3 {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
+  right: 0;
   z-index: 100;
   background: #fff;
   border: 1px solid var(--line);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   max-height: 320px;
   overflow: hidden;
-  min-width: 100%;
-  width: max-content;
+  width: 100%;
 }
 
 .searchable-select-dropdown.is-open {
