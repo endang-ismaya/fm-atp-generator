@@ -439,6 +439,31 @@ th {
   color: var(--warn);
 }
 
+.proficiency-natural {
+  color: #1b7f67;
+  font-weight: 700;
+}
+
+.proficiency-accomplished {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.proficiency-competent {
+  color: #9a6700;
+  font-weight: 600;
+}
+
+.proficiency-unconvincing {
+  color: #e67e22;
+  font-weight: 600;
+}
+
+.proficiency-awkward {
+  color: #b42318;
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .app-shell {
     padding: 0;

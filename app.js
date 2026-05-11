@@ -2606,39 +2606,75 @@ function getModeSummaryItems() {
   ];
 }
 
+function getPositionProficiency(score) {
+  if (score >= 18) return { label: "Natural", class: "proficiency-natural" };
+  if (score >= 14) return { label: "Accomplished", class: "proficiency-accomplished" };
+  if (score >= 10) return { label: "Competent", class: "proficiency-competent" };
+  if (score >= 6) return { label: "Unconvincing", class: "proficiency-unconvincing" };
+  return { label: "Awkward", class: "proficiency-awkward" };
+}
+
+function calculatePositionScore(values, attrs) {
+  const sum = attrs.reduce((total, attr) => total + (Number(values[attr]) || 0), 0);
+  return sum / attrs.length;
+}
+
 function inferPositionSuggestions() {
   const values = state.values;
   const suggestions = [];
+
+  const positionAttributes = {
+    DC: ["Marking", "Tackling", "Positioning", "Heading", "Strength", "Jumping Reach", "Anticipation", "Concentration"],
+    "DR/DL": ["Crossing", "Tackling", "Marking", "Positioning", "Stamina", "Pace", "Acceleration", "Work Rate"],
+    "WBR/WBL": ["Crossing", "Dribbling", "Tackling", "Stamina", "Pace", "Acceleration", "Work Rate", "Off the Ball"],
+    DM: ["Positioning", "Passing", "Tackling", "Marking", "Anticipation", "Decisions", "Strength", "Work Rate"],
+    MC: ["Passing", "Decisions", "Teamwork", "Work Rate", "Technique", "Tackling", "Stamina", "First Touch"],
+    AMC: ["Vision", "Passing", "Technique", "First Touch", "Dribbling", "Off the Ball", "Decisions", "Flair"],
+    "MR/ML": ["Crossing", "Passing", "Tackling", "Positioning", "Teamwork", "Work Rate", "Stamina", "Decisions"],
+    "AMR/AML": ["Dribbling", "Crossing", "Pace", "Acceleration", "Off the Ball", "Technique", "Finishing", "Agility"],
+    ST: ["Finishing", "Off the Ball", "Anticipation", "Composure", "Acceleration", "Pace", "First Touch", "Decisions"],
+  };
+
+  const positionThresholds = {
+    DC: { min: 15, key: ["Marking", "Tackling", "Positioning"] },
+    "DR/DL": { min: 14, key: ["Crossing", "Tackling", "Stamina"] },
+    "WBR/WBL": { min: 14, key: ["Crossing", "Dribbling", "Stamina"] },
+    DM: { min: 14, key: ["Positioning", "Passing", "Tackling"] },
+    MC: { min: 14, key: ["Passing", "Decisions", "Teamwork"] },
+    AMC: { min: 15, key: ["Vision", "Passing", "Technique"] },
+    "MR/ML": { min: 14, key: ["Crossing", "Passing", "Work Rate"] },
+    "AMR/AML": { min: 15, key: ["Dribbling", "Pace", "Crossing"] },
+    ST: { min: 15, key: ["Finishing", "Off the Ball", "Anticipation"] },
+  };
+
   if (getPresetMode() === "role") {
     getSelectedRoleLabels().forEach((label) => {
       label
         .split(" - ")[0]
         .split("/")
-        .forEach((position) => suggestions.push(position.trim()));
+        .forEach((position) => {
+          const pos = position.trim();
+          const attrs = positionAttributes[pos];
+          if (attrs) {
+            const score = calculatePositionScore(values, attrs);
+            const prof = getPositionProficiency(score);
+            suggestions.push(`${pos} <span class="${prof.class}">${prof.label}</span>`);
+          } else {
+            suggestions.push(pos);
+          }
+        });
     });
   }
-  if (values.Marking >= 15 && values.Tackling >= 15 && values.Positioning >= 15) {
-    suggestions.push("DC");
+
+  for (const [position, { min, key }] of Object.entries(positionThresholds)) {
+    if (key.every((attr) => values[attr] >= min)) {
+      const score = calculatePositionScore(values, positionAttributes[position]);
+      const prof = getPositionProficiency(score);
+      suggestions.push(`${position} <span class="${prof.class}">${prof.label}</span>`);
+    }
   }
-  if (values.Crossing >= 14 && values.Tackling >= 13 && values.Stamina >= 14) {
-    suggestions.push("DR/DL", "WBR/WBL");
-  }
-  if (values.Positioning >= 14 && values.Passing >= 13 && values.Tackling >= 13) {
-    suggestions.push("DM");
-  }
-  if (values.Passing >= 14 && values.Decisions >= 14 && values.Teamwork >= 13) {
-    suggestions.push("MC");
-  }
-  if (values.Vision >= 15 && values.Passing >= 15 && values.Technique >= 15) {
-    suggestions.push("AMC");
-  }
-  if (values.Dribbling >= 15 && values.Pace >= 14 && values.Crossing >= 13) {
-    suggestions.push("MR/ML", "AMR/AML");
-  }
-  if (values.Finishing >= 15 && values["Off the Ball"] >= 15) {
-    suggestions.push("ST");
-  }
-  return [...new Set(suggestions)].slice(0, 6);
+
+  return [...new Set(suggestions)].slice(0, 8);
 }
 
 function inferRoleSuggestions() {
@@ -2807,11 +2843,15 @@ function renderSuggestionCard(title, items) {
   `;
 }
 
+function stripHtmlTags(html) {
+  return html.replace(/<[^>]*>/g, "");
+}
+
 function buildChecklistText() {
   const suggestions = inferEditorSuggestions();
   const sections = [
     ["Selection", [suggestions.selection]],
-    ["Suggested Positions", suggestions.positions],
+    ["Suggested Positions", suggestions.positions.map((item) => stripHtmlTags(item))],
     ["Suggested Roles", suggestions.roles],
     ["Manual Editor Values", suggestions.editor],
     ["Fitness Suggestions", suggestions.fitness],
