@@ -67,8 +67,11 @@
             <span>Level</span>
             <select id="roleLevelSelect"></select>
           </label>
-          <button class="secondary-button" id="applyPreset" type="button">Apply Preset</button>
-          <button class="primary-button" id="exportButton" type="button">Export .atp</button>
+          <div class="control-actions">
+            <button class="secondary-button" id="applyPreset" type="button">Apply Preset</button>
+            <button class="ghost-button" id="resetSelectionsButton" type="button">Reset Selections</button>
+            <button class="primary-button" id="exportButton" type="button">Export .atp</button>
+          </div>
         </section>
 
         <section class="export-summary" id="exportSummary"></section>
@@ -93,6 +96,7 @@
           <button class="tab is-active" data-tab="visible" type="button">Visible</button>
           <button class="tab" data-tab="hidden" type="button">Hidden</button>
           <button class="tab" data-tab="suggestions" type="button">Editor Suggestions</button>
+          <button class="tab" data-tab="analysis" type="button">Analysis</button>
           <button class="tab" data-tab="preview" type="button">Byte Preview</button>
         </nav>
 
@@ -129,6 +133,55 @@
           </div>
           <p class="note">These suggestions are not written to the .atp file. Set them manually in the FM editor.</p>
           <div class="suggestion-grid" id="suggestionGrid"></div>
+        </section>
+
+        <section class="panel" id="analysisPanel">
+          <div class="panel-head">
+            <h2>Analysis</h2>
+          </div>
+          <div class="analysis-grid">
+            <article class="analysis-card role-fit-card">
+              <h3>Best Role Fits</h3>
+              <div class="role-fit-list" id="roleFitList"></div>
+            </article>
+            <article class="analysis-card compare-card">
+              <h3>Compare Against</h3>
+              <div class="compare-controls">
+                <label class="field">
+                  <span>Target Type</span>
+                  <select id="compareTypeSelect">
+                    <option value="player">Player preset</option>
+                    <option value="role">Role target</option>
+                  </select>
+                </label>
+                <label class="field compare-player-control">
+                  <span>Player</span>
+                  <select id="comparePlayerSelect"></select>
+                </label>
+                <label class="field compare-player-control">
+                  <span>Version</span>
+                  <select id="compareProfileSelect"></select>
+                </label>
+                <label class="field compare-role-control is-hidden">
+                  <span>Role</span>
+                  <select id="compareRoleSelect"></select>
+                </label>
+                <label class="field compare-role-control is-hidden">
+                  <span>Duty</span>
+                  <select id="compareDutySelect"></select>
+                </label>
+                <label class="field compare-role-control is-hidden">
+                  <span>Level</span>
+                  <select id="compareLevelSelect"></select>
+                </label>
+              </div>
+              <div class="comparison-summary" id="comparisonSummary"></div>
+            </article>
+            <article class="analysis-card delta-card">
+              <h3>Attribute Deltas</h3>
+              <div class="delta-list" id="deltaList"></div>
+            </article>
+          </div>
         </section>
 
         <section class="panel" id="previewPanel">
