@@ -157,6 +157,11 @@ const attributeValueGuidance = {
   "Injury Proneness": "Lower is better; 20 means very injury-prone.",
   Versatility: "Higher is better for covering or learning more positions.",
 };
+const lowerIsBetterBlendAttributes = new Set([
+  "Controversy",
+  "Dirtiness",
+  "Injury Proneness",
+]);
 const baselinePresetValues = Object.fromEntries(
   attributes.map((attribute) => [attribute.name, 10]),
 );
@@ -1051,6 +1056,7 @@ const elements = {
   roleDutySelect: document.querySelector("#roleDutySelect"),
   roleLevelSelect: document.querySelector("#roleLevelSelect"),
   applyPreset: document.querySelector("#applyPreset"),
+  resetSelectionsButton: document.querySelector("#resetSelectionsButton"),
   exportButton: document.querySelector("#exportButton"),
   downloadChecklist: document.querySelector("#downloadChecklist"),
   visibleRelevantOnly: document.querySelector("#visibleRelevantOnly"),
@@ -1059,6 +1065,15 @@ const elements = {
   visibleAttributes: document.querySelector("#visibleAttributes"),
   hiddenAttributes: document.querySelector("#hiddenAttributes"),
   suggestionGrid: document.querySelector("#suggestionGrid"),
+  roleFitList: document.querySelector("#roleFitList"),
+  compareTypeSelect: document.querySelector("#compareTypeSelect"),
+  comparePlayerSelect: document.querySelector("#comparePlayerSelect"),
+  compareProfileSelect: document.querySelector("#compareProfileSelect"),
+  compareRoleSelect: document.querySelector("#compareRoleSelect"),
+  compareDutySelect: document.querySelector("#compareDutySelect"),
+  compareLevelSelect: document.querySelector("#compareLevelSelect"),
+  comparisonSummary: document.querySelector("#comparisonSummary"),
+  deltaList: document.querySelector("#deltaList"),
   previewRows: document.querySelector("#previewRows"),
   hexDump: document.querySelector("#hexDump"),
   fileStatus: document.querySelector("#fileStatus"),
@@ -1532,6 +1547,149 @@ function inferEditorSuggestions() {
   };
 }
 
+function getRoleAnalysisAttributeWeights(roleKey, dutyKey) {
+  const weights = new Map();
+  const role = rolePresets[roleKey] ?? rolePresets.none;
+  const duty = roleDutyPresets[dutyKey] ?? roleDutyPresets.support;
+
+  Object.entries(role.boosts).forEach(([name, boost]) => {
+    weights.set(name, Math.max(weights.get(name) ?? 0, 2 + boost));
+  });
+  Object.entries(duty.boosts).forEach(([name, boost]) => {
+    weights.set(name, Math.max(weights.get(name) ?? 0, 1 + boost));
+  });
+  ["Consistency", "Important Matches", "Professionalism", "Pressure"].forEach((name) => {
+    weights.set(name, Math.max(weights.get(name) ?? 0, 1));
+  });
+  return weights;
+}
+
+function getRoleFitScore(roleKey, dutyKey, levelKey) {
+  const targetValues = buildRoleTargetValues(roleKey, "none", "none", dutyKey, levelKey);
+  const weights = getRoleAnalysisAttributeWeights(roleKey, dutyKey);
+  const compared = [...weights.entries()].filter(([name]) => state.values[name] !== undefined);
+  if (!compared.length) return null;
+
+  let weightedScore = 0;
+  let totalWeight = 0;
+  const deltas = compared.map(([name, weight]) => {
+    const current = Number(state.values[name]);
+    const target = Number(targetValues[name]);
+    const delta = current - target;
+    const targetFit = current >= target
+      ? 1
+      : Math.max(0, 1 - (target - current) / 19);
+    const strengthFit = Math.max(0, Math.min(1, current / 20));
+    const score = targetFit * 0.35 + strengthFit * 0.65;
+    weightedScore += score * weight;
+    totalWeight += weight;
+    return { name, current, target, delta, weight };
+  });
+
+  const strengths = deltas
+    .filter((item) => item.delta >= 0)
+    .sort((left, right) => right.current - left.current || right.weight - left.weight)
+    .slice(0, 3);
+  const gaps = deltas
+    .filter((item) => item.delta < 0)
+    .sort((left, right) => left.delta - right.delta)
+    .slice(0, 3);
+
+  return {
+    key: roleKey,
+    label: rolePresets[roleKey].label,
+    score: Math.round((weightedScore / totalWeight) * 100),
+    strengths,
+    gaps,
+  };
+}
+
+function getTopRoleFits() {
+  const dutyKey = getPresetMode() === "role" ? elements.roleDutySelect.value : "support";
+  const levelKey = getPresetMode() === "role" ? elements.roleLevelSelect.value : "good";
+  const selectedRoleKeys = new Set([
+    elements.roleSelect.value,
+    elements.secondaryRoleSelect.value,
+    elements.thirdRoleSelect.value,
+  ]);
+  return Object.keys(rolePresets)
+    .filter((roleKey) => roleKey !== "none")
+    .filter((roleKey) => {
+      const isGoalkeeperRole = rolePresets[roleKey].label.startsWith("GK -");
+      return !isGoalkeeperRole || selectedRoleKeys.has(roleKey);
+    })
+    .map((roleKey) => getRoleFitScore(roleKey, dutyKey, levelKey))
+    .filter(Boolean)
+    .sort((left, right) => right.score - left.score)
+    .slice(0, 5);
+}
+
+function getComparisonTargetValues() {
+  if (elements.compareTypeSelect.value === "role") {
+    return {
+      label: `${rolePresets[elements.compareRoleSelect.value].label} (${roleDutyPresets[elements.compareDutySelect.value].label}, ${roleLevelPresets[elements.compareLevelSelect.value].label})`,
+      values: buildRoleTargetValues(
+        elements.compareRoleSelect.value,
+        "none",
+        "none",
+        elements.compareDutySelect.value,
+        elements.compareLevelSelect.value,
+      ),
+    };
+  }
+  const selection = getPlayerProfile(
+    elements.comparePlayerSelect.value,
+    elements.compareProfileSelect.value,
+  );
+  return {
+    label: `${selection.player.label} ${selection.profile.label}`,
+    values: buildFullPresetValues(elements.comparePlayerSelect.value, elements.compareProfileSelect.value),
+  };
+}
+
+function getComparisonAnalysis() {
+  const target = getComparisonTargetValues();
+  const deltas = attributes.map((attribute) => {
+    const current = Number(state.values[attribute.name]);
+    const targetValue = Number(target.values[attribute.name]);
+    return {
+      name: attribute.name,
+      group: attribute.group,
+      category: attribute.category ?? attribute.group,
+      current,
+      target: targetValue,
+      delta: current - targetValue,
+    };
+  });
+  const averageDelta =
+    deltas.reduce((total, item) => total + Math.abs(item.delta), 0) / deltas.length;
+  const similarity = Math.round(Math.max(0, 100 - (averageDelta / 19) * 100));
+  const categories = [
+    ["Technical", visibleAttributes.filter((attribute) => attribute.category === "technical")],
+    ["Mental", visibleAttributes.filter((attribute) => attribute.category === "mental")],
+    ["Physical", visibleAttributes.filter((attribute) => attribute.category === "physical")],
+    ["Hidden", hiddenAttributes],
+  ].map(([label, categoryAttributes]) => {
+    const names = new Set(categoryAttributes.map((attribute) => attribute.name));
+    const categoryDeltas = deltas.filter((item) => names.has(item.name));
+    const average =
+      categoryDeltas.reduce((total, item) => total + item.delta, 0) / categoryDeltas.length;
+    return { label, average };
+  });
+
+  return {
+    target,
+    similarity,
+    categories,
+    deltas: deltas.sort((left, right) => Math.abs(right.delta) - Math.abs(left.delta)),
+  };
+}
+
+function formatDelta(delta) {
+  if (delta > 0) return `+${delta}`;
+  return String(delta);
+}
+
 function renderSuggestionCard(title, items) {
   const listItems = items.length ? items : ["No strong suggestion from current attributes."];
   return `
@@ -1598,6 +1756,78 @@ function updateSuggestions() {
     renderSuggestionCard("Fitness Suggestions", suggestions.fitness),
     renderSuggestionCard("Possible Player Traits", suggestions.traits),
   ].join("");
+}
+
+function renderRoleFitItem(fit, isPrimary = false) {
+  const strengths = fit.strengths.length
+    ? fit.strengths.map((item) => `${item.name} ${item.current}`).join(", ")
+    : "No clear surplus yet";
+  const gaps = fit.gaps.length
+    ? fit.gaps.map((item) => `${item.name} ${formatDelta(item.delta)}`).join(", ")
+    : "No major gaps";
+  return `
+    <section class="role-fit-item${isPrimary ? " is-primary" : ""}">
+      <div class="score-row">
+        <strong>${fit.label}</strong>
+        <span>${fit.score}%</span>
+      </div>
+      <progress class="score-bar" value="${fit.score}" max="100" aria-label="${fit.label} fit score"></progress>
+      ${isPrimary ? `<p><strong>Strengths:</strong> ${strengths}</p><p><strong>Gaps:</strong> ${gaps}</p>` : ""}
+    </section>
+  `;
+}
+
+function updateAnalysisMode() {
+  const isRoleComparison = elements.compareTypeSelect.value === "role";
+  document.querySelectorAll(".compare-player-control").forEach((element) => {
+    element.classList.toggle("is-hidden", isRoleComparison);
+  });
+  document.querySelectorAll(".compare-role-control").forEach((element) => {
+    element.classList.toggle("is-hidden", !isRoleComparison);
+  });
+}
+
+function updateAnalysis() {
+  const roleFits = getTopRoleFits();
+  elements.roleFitList.innerHTML = roleFits
+    .map((fit, index) => renderRoleFitItem(fit, index === 0))
+    .join("");
+
+  const comparison = getComparisonAnalysis();
+  elements.comparisonSummary.innerHTML = `
+    <div class="similarity-score">
+      <span>Similarity</span>
+      <strong>${comparison.similarity}%</strong>
+      <em>${comparison.target.label}</em>
+    </div>
+    <div class="category-deltas">
+      ${comparison.categories
+        .map(
+          (category) => `
+            <span>
+              ${category.label}
+              <strong class="${category.average > 0 ? "delta-positive" : category.average < 0 ? "delta-negative" : "delta-even"}">${formatDelta(Math.round(category.average))}</strong>
+            </span>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+
+  elements.deltaList.innerHTML = comparison.deltas
+    .slice(0, 14)
+    .map((item) => {
+      const deltaClass =
+        item.delta > 0 ? "delta-positive" : item.delta < 0 ? "delta-negative" : "delta-even";
+      return `
+        <div class="delta-row">
+          <span>${item.name}</span>
+          <span>${item.current} vs ${item.target}</span>
+          <strong class="${deltaClass}">${formatDelta(item.delta)}</strong>
+        </div>
+      `;
+    })
+    .join("");
 }
 
 function updateInputs() {
@@ -1693,6 +1923,7 @@ function updateOutput() {
 
   elements.hexDump.textContent = formatHexDump(output, changed);
   updateSuggestions();
+  updateAnalysis();
 }
 
 function formatHexDump(bytes, changed) {
@@ -1725,6 +1956,11 @@ function populatePlayerSelect(select, includeNeutral = false) {
 function populateProfileSelect(playerSelect, profileSelect) {
   const player =
     neutralPlayerPreset[playerSelect.value] ?? playerPresets[playerSelect.value];
+  if (!player) {
+    profileSelect.innerHTML = "";
+    profileSelect.disabled = true;
+    return;
+  }
   profileSelect.innerHTML = "";
   for (const [key, profile] of Object.entries(player.profiles)) {
     profileSelect.add(new Option(profile.label, key));
@@ -1732,20 +1968,7 @@ function populateProfileSelect(playerSelect, profileSelect) {
   profileSelect.disabled = Boolean(player.neutral);
 }
 
-function populateSelects() {
-  populatePlayerSelect(elements.playerSelectA);
-  populatePlayerSelect(elements.playerSelectB, true);
-  for (const [key, role] of Object.entries(rolePresets)) {
-    elements.roleSelect.add(new Option(role.label, key));
-    elements.secondaryRoleSelect.add(new Option(role.label, key));
-    elements.thirdRoleSelect.add(new Option(role.label, key));
-  }
-  for (const [key, duty] of Object.entries(roleDutyPresets)) {
-    elements.roleDutySelect.add(new Option(duty.label, key));
-  }
-  for (const [key, level] of Object.entries(roleLevelPresets)) {
-    elements.roleLevelSelect.add(new Option(level.label, key));
-  }
+function setDefaultSelections() {
   elements.playerSelectA.value = "maldini";
   elements.playerSelectB.value = "none";
   elements.presetTypeSelect.value = "player";
@@ -1754,10 +1977,60 @@ function populateSelects() {
   elements.thirdRoleSelect.value = "none";
   elements.roleDutySelect.value = "defend";
   elements.roleLevelSelect.value = "good";
+  elements.compareTypeSelect.value = "player";
+  elements.comparePlayerSelect.value = "messi";
+  elements.compareRoleSelect.value = "advancedForward";
+  elements.compareDutySelect.value = "attack";
+  elements.compareLevelSelect.value = "good";
+
   populateProfileSelect(elements.playerSelectA, elements.profileSelectA);
   populateProfileSelect(elements.playerSelectB, elements.profileSelectB);
+  populateProfileSelect(elements.comparePlayerSelect, elements.compareProfileSelect);
   elements.profileSelectA.value = "prime";
+  elements.compareProfileSelect.value = "prime";
+
+  [
+    elements.presetTypeSelect,
+    elements.playerSelectA,
+    elements.profileSelectA,
+    elements.playerSelectB,
+    elements.profileSelectB,
+    elements.roleSelect,
+    elements.secondaryRoleSelect,
+    elements.thirdRoleSelect,
+    elements.roleDutySelect,
+    elements.roleLevelSelect,
+    elements.compareTypeSelect,
+    elements.comparePlayerSelect,
+    elements.compareProfileSelect,
+    elements.compareRoleSelect,
+    elements.compareDutySelect,
+    elements.compareLevelSelect,
+  ].forEach((select) => select.dispatchEvent(new Event("change")));
+
   updatePresetMode();
+  updateAnalysisMode();
+}
+
+function populateSelects() {
+  populatePlayerSelect(elements.playerSelectA);
+  populatePlayerSelect(elements.playerSelectB, true);
+  populatePlayerSelect(elements.comparePlayerSelect);
+  for (const [key, role] of Object.entries(rolePresets)) {
+    elements.roleSelect.add(new Option(role.label, key));
+    elements.secondaryRoleSelect.add(new Option(role.label, key));
+    elements.thirdRoleSelect.add(new Option(role.label, key));
+    if (key !== "none") elements.compareRoleSelect.add(new Option(role.label, key));
+  }
+  for (const [key, duty] of Object.entries(roleDutyPresets)) {
+    elements.roleDutySelect.add(new Option(duty.label, key));
+    elements.compareDutySelect.add(new Option(duty.label, key));
+  }
+  for (const [key, level] of Object.entries(roleLevelPresets)) {
+    elements.roleLevelSelect.add(new Option(level.label, key));
+    elements.compareLevelSelect.add(new Option(level.label, key));
+  }
+  setDefaultSelections();
 }
 
 function getPlayerProfile(playerKey, profileKey) {
@@ -1933,10 +2206,12 @@ function applyPlayerProfiles(
   }
   const second = buildFullPresetValues(secondPlayerKey, secondProfileKey);
   const combinedValues = Object.fromEntries(
-    attributes.map((attribute) => [
-      attribute.name,
-      Math.round((first[attribute.name] + second[attribute.name]) / 2),
-    ]),
+    attributes.map((attribute) => {
+      const blend = lowerIsBetterBlendAttributes.has(attribute.name)
+        ? Math.min(first[attribute.name], second[attribute.name])
+        : Math.max(first[attribute.name], second[attribute.name]);
+      return [attribute.name, blend];
+    }),
   );
   state.values = combinedValues;
   const firstStandout = getStandoutAttributes(first);
@@ -2131,11 +2406,31 @@ function bindEvents() {
   elements.playerSelectB.addEventListener("change", () => {
     populateProfileSelect(elements.playerSelectB, elements.profileSelectB);
   });
+  elements.comparePlayerSelect.addEventListener("change", () => {
+    populateProfileSelect(elements.comparePlayerSelect, elements.compareProfileSelect);
+    updateOutput();
+  });
+  elements.compareTypeSelect.addEventListener("change", () => {
+    updateAnalysisMode();
+    updateOutput();
+  });
+  [
+    elements.compareProfileSelect,
+    elements.compareRoleSelect,
+    elements.compareDutySelect,
+    elements.compareLevelSelect,
+  ].forEach((select) => {
+    select.addEventListener("change", updateOutput);
+  });
 
   elements.presetTypeSelect.addEventListener("change", updatePresetMode);
   elements.visibleRelevantOnly.addEventListener("click", () => toggleRelevantOnly("visible"));
   elements.hiddenRelevantOnly.addEventListener("click", () => toggleRelevantOnly("hidden"));
   elements.downloadChecklist.addEventListener("click", downloadChecklist);
+  elements.resetSelectionsButton.addEventListener("click", () => {
+    setDefaultSelections();
+    updateOutput();
+  });
   elements.applyPreset.addEventListener("click", () => {
     if (getPresetMode() === "role") {
       applyRolePreset(

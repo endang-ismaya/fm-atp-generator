@@ -137,12 +137,19 @@ h3 {
 }
 
 .control-band {
-  grid-template-columns: 1.15fr repeat(6, minmax(140px, 1fr)) auto auto;
+  grid-template-columns: minmax(150px, 0.9fr) minmax(220px, 1.35fr) minmax(110px, 0.7fr) minmax(220px, 1.35fr) minmax(110px, 0.7fr);
   align-items: end;
 }
 
+.control-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  grid-column: 1 / -1;
+}
+
 .role-field {
-  grid-column: span 2;
+  grid-column: span 1;
 }
 
 .searchable-select {
@@ -582,6 +589,164 @@ th {
   margin: 4px 0;
 }
 
+.analysis-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(320px, 1.15fr) minmax(280px, 0.95fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.analysis-card {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.analysis-card h3 {
+  color: var(--ink);
+}
+
+.role-fit-list,
+.delta-list,
+.comparison-summary {
+  display: grid;
+  gap: 10px;
+}
+
+.role-fit-item {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: #fbfcfd;
+}
+
+.role-fit-item.is-primary {
+  border-color: #8ac4b4;
+  background: #f4fbf8;
+}
+
+.role-fit-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.score-row,
+.delta-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.score-row span {
+  color: var(--accent-dark);
+  font-weight: 850;
+}
+
+.score-bar {
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border: 0;
+  background: #dfe7eb;
+}
+
+.score-bar::-webkit-progress-bar {
+  background: #dfe7eb;
+}
+
+.score-bar::-webkit-progress-value {
+  background: var(--accent);
+}
+
+.score-bar::-moz-progress-bar {
+  background: var(--accent);
+}
+
+.compare-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.similarity-score {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+}
+
+.similarity-score span,
+.similarity-score em {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.similarity-score strong {
+  color: var(--accent-dark);
+  font-size: 2rem;
+}
+
+.category-deltas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.category-deltas span {
+  display: grid;
+  gap: 3px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.category-deltas strong {
+  font-size: 1.1rem;
+}
+
+.delta-row {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: #fbfcfd;
+}
+
+.delta-row span:first-child {
+  font-weight: 750;
+}
+
+.delta-row span:nth-child(2) {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.delta-positive {
+  color: var(--accent-dark);
+}
+
+.delta-negative {
+  color: var(--danger);
+}
+
+.delta-even {
+  color: var(--muted);
+}
+
 .error {
   color: var(--danger);
 }
@@ -628,8 +793,15 @@ th {
 
   .control-band,
   .summary-grid,
-  .attribute-grid.sectioned {
+  .attribute-grid.sectioned,
+  .analysis-grid,
+  .compare-controls,
+  .category-deltas {
     grid-template-columns: 1fr;
+  }
+
+  .control-actions {
+    flex-direction: column;
   }
 
   .tabs {

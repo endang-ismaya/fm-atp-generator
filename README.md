@@ -11,7 +11,7 @@ A single-page web application for creating custom `.atp` (attribute template) fi
 - **Player Presets** — Choose from 90+ built-in legends (Pele, Maradona, Messi, Ronaldo, Yashin, Best, Baggio, Platini, Cruyff, van Basten, Gullit, Maldini, etc.) with Prime, Wonderkid, and Veteran profiles
 - **Role Focus** — Generate templates for 30+ tactical roles (Goalkeeper to Striker) with duty and quality level options
 - **Custom Upload** — Load your own `.atp` file as a baseline template
-- **Dual Player Blend** — Combine two player presets into a single averaged attribute set
+- **Dual Player Blend** — Combine two player presets by taking the stronger value for each attribute, with lower-risk hidden traits kept low
 - **48 Editable Attributes** —
   - 35 **Visible**: Technical, Mental, and Physical
   - 13 **Hidden**: Personality traits, Consistency, Injury Proneness, etc.
@@ -31,6 +31,8 @@ A single-page web application for creating custom `.atp` (attribute template) fi
 3. Adjust individual attributes using the steppers or bulk controls
 4. Review the *Editor Suggestions* tab for manual FM Editor settings
 5. Click **Export .atp** to download your custom template
+
+Use **Reset Selections** to restore the preset and analysis dropdowns to their defaults.
 
 ---
 
